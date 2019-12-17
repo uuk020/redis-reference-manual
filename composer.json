@@ -1,0 +1,22 @@
+{
+    "name": "wythe/redis",
+    "description": "redis reference manual",
+    "type": "redis example",
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Wythe Huang",
+            "email": "wythe.huangw@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Wythe\\Redis\\": "\\"
+        }
+    }
+}
