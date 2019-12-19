@@ -10,13 +10,13 @@ namespace Wythe\Redis\Chapter1\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Wythe\Redis\Chapter1\Src\Lock;
+use Wythe\Redis\Client;
 
 class LockTest extends TestCase
 {
     public function testInvoke()
     {
-        $redis = new \Redis();
-        $redis->connect('127.0.0.1', 6379);
+        $redis = new Client();
         $lockObject = new Lock($redis, 'lock');
         $this->assertInstanceOf(Lock::class, $lockObject);
         return $lockObject;

@@ -10,6 +10,7 @@ namespace Wythe\Redis\Chapter1\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Wythe\Redis\Chapter1\src\Article;
+use Wythe\Redis\Client;
 
 class ArticleTest extends TestCase
 {
@@ -18,9 +19,8 @@ class ArticleTest extends TestCase
      */
     public function testInvoke()
     {
-        $redis = new \Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $articleObject = new Article($redis, 1024);
+        $client = new Client();
+        $articleObject = new Article($client, 1024);
         $this->assertInstanceOf(Article::class, $articleObject);
         return $articleObject;
     }
@@ -52,9 +52,8 @@ class ArticleTest extends TestCase
     {
         $title = 'readme';
         $this->assertTrue($article->update($title));
-        $redis = new \Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $this->assertEquals($title, $redis->get('article::1024::title'));
+        $client = new Client();
+        $this->assertEquals($title, $client->handler()->get('article::1024::title'));
     }
 
     /**
@@ -65,9 +64,8 @@ class ArticleTest extends TestCase
     {
         $content = 'redis reference manual';
         $this->assertTrue($article->update('', $content));
-        $redis = new \Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $this->assertEquals($content, $redis->get('article::1024::content'));
+        $redis = new Client();
+        $this->assertEquals($content, $redis->handler()->get('article::1024::content'));
     }
 
     /**
@@ -78,9 +76,8 @@ class ArticleTest extends TestCase
     {
         $author = 'nathan';
         $this->assertTrue($article->update('', '', $author));
-        $redis = new \Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $this->assertEquals($author, $redis->get('article::1024::author'));
+        $redis = new Client();
+        $this->assertEquals($author, $redis->handler()->get('article::1024::author'));
     }
 
     /**
@@ -97,5 +94,23 @@ class ArticleTest extends TestCase
             'create_at' => '2019-12-17',
         ];
         $this->assertEquals($expected, $article->get());
+    }
+
+    /**
+     * @depends testInvoke
+     * @param \Wythe\Redis\Chapter1\src\Article $article
+     */
+    public function testArticleLen(Article $article)
+    {
+        $this->assertEquals(22, $article->getContentLen());
+    }
+
+    /**
+     * @depends testInvoke
+     * @param \Wythe\Redis\Chapter1\src\Article $article
+     */
+    public function testArticlePreview(Article $article)
+    {
+        $this->assertEquals('redis', $article->getContentPreview(5));
     }
 }

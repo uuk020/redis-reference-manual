@@ -8,6 +8,8 @@
 
 namespace Wythe\Redis\Chapter1\Src;
 
+use Wythe\Redis\Client;
+
 /**
  * Class Lock
  * @package wythe\redis\Chapter1\Src
@@ -20,23 +22,24 @@ class Lock
     const VALUE_OF_LOCK = 'locking';
 
     /**
-     * @var
+     * @var string
      */
     private $key;
 
     /**
-     * @var \Redis
+     * redis
+     * @var Client
      */
-    private $redisClient;
+    protected $client;
 
     /**
      * Lock constructor.
-     * @param \Redis $redis
+     * @param \Wythe\Redis\Client $client
      * @param        $key
      */
-    public function __construct(\Redis $redis, $key)
+    public function __construct(Client $client, $key)
     {
-        $this->redisClient = $redis;
+        $this->client = $client;
         $this->key = $key;
     }
 
@@ -46,7 +49,7 @@ class Lock
      */
     public function acquire()
     {
-        $result = $this->redisClient->set(self::VALUE_OF_LOCK, $this->key, ["nx"]);
+        $result = $this->client->handler()->set(self::VALUE_OF_LOCK, $this->key, ["nx"]);
         return $result === true;
     }
 
@@ -56,6 +59,6 @@ class Lock
      */
     public function release()
     {
-        return $this->redisClient->del(self::VALUE_OF_LOCK) === 1;
+        return $this->client->handler()->del(self::VALUE_OF_LOCK) === 1;
     }
 }

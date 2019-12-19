@@ -8,6 +8,8 @@
 
 namespace Wythe\Redis\Chapter1\Src;
 
+use Wythe\Redis\Client;
+
 /**
  * redis 示列缓存
  * @package wythe\redis\Chapter1\Src
@@ -16,17 +18,17 @@ class Cache
 {
     /**
      * redis 实例
-     * @var \Redis
+     * @var \Wythe\Redis\Client
      */
-    private $redisClient;
+    private $client;
 
     /**
      * Cache constructor.
-     * @param \Redis $redis
+     * @param \Wythe\Redis\Client $client
      */
-    public function __construct(\Redis $redis)
+    public function __construct(Client $client)
     {
-        $this->redisClient = $redis;
+        $this->client = $client;
     }
 
     /**
@@ -36,7 +38,7 @@ class Cache
      */
     public function set($key, $value)
     {
-        $this->redisClient->set($key, $value);
+        $this->client->handler()->set($key, $value);
     }
 
     /**
@@ -46,7 +48,7 @@ class Cache
      */
     public function get($key)
     {
-        return $this->redisClient->get($key);
+        return $this->client->handler()->get($key);
     }
 
     /**
@@ -57,6 +59,6 @@ class Cache
      */
     public function update($key, $newValue)
     {
-        return $this->redisClient->getSet($key, $newValue);
+        return $this->client->handler()->getSet($key, $newValue);
     }
 }
