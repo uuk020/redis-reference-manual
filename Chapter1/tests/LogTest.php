@@ -6,6 +6,7 @@
  * Time: 0:21
  */
 
+declare(strict_types = 1);
 namespace Wythe\Redis\Chapter1\tests;
 
 

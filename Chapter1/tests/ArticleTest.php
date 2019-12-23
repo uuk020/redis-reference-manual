@@ -6,6 +6,7 @@
  * Time: 23:33
  */
 
+declare(strict_types = 1);
 namespace Wythe\Redis\Chapter1\Tests;
 
 use PHPUnit\Framework\TestCase;
