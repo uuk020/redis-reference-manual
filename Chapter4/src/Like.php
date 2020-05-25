@@ -30,10 +30,28 @@ class Like
         $this->key = $client;
     }
 
-    public function cast(int $userId)
+    public function cast(int $userId): bool
     {
         return $this->client->handler()->sAdd($this->key, $userId) == 1;
     }
 
+    public function undo(int $userId)
+    {
+        $this->client->handler()->sRem($this->key, $userId);
+    }
 
+    public function isLiked(int $userId): bool
+    {
+        return $this->client->handler()->sIsMember($this->key, $userId);
+    }
+
+    public function getAllLikedUsers(): array
+    {
+        return $this->client->handler()->sMembers($this->key);
+    }
+
+    public function count(): int
+    {
+        return $this->client->handler()->sCard($this->key);
+    }
 }
